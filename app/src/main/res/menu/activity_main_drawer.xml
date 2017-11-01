@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_featured"
+            android:icon="@drawable/featured"
+            android:title="Featured Places" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/gallary"
+            android:title="Gallery" />
+        <item
+            android:id="@+id/nav_nearby"
+            android:icon="@drawable/ic_cast_off_light"
+            android:title="Find Nearby Places" />
+        <item
+            android:id="@+id/nav_trekking_locations"
+            android:icon="@drawable/gallary"
+            android:title="Trekking Locations" />
+
+        <item
+            android:id="@+id/nav_view_users"
+            android:icon="@drawable/view"
+            android:title="View Users" />
+        <item
+            android:id="@+id/nav_about_us"
+            android:icon="@drawable/about"
+            android:title="About Us" />
+        <item
+            android:id="@+id/nav_contact_us"
+            android:icon="@drawable/contact"
+            android:title="Contact Us" />
+    </group>
+
+
+</menu>

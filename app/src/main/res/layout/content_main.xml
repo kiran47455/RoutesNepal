@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.soch.tourismapp.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center_horizontal"
+        card_view:cardUseCompatPadding="true"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="60dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:layout_constraintBottom_toTopOf="@+id/map">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:padding="5dp"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/searchText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:background="@color/colorBackground"
+                android:hint="Search..."
+                android:lines="1"
+                android:maxLines="1"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:textColorHint="@color/colorHintText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.85"
+                android:background="@android:drawable/ic_menu_search"
+                android:layout_marginLeft="5dp"
+                android:pointerIcon="zoom_in"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="center"
+                android:id="@+id/searchButton" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="fill_parent"
+        map:layout_constraintLeft_toLeftOf="@+id/card_view"
+        map:layout_constraintRight_toLeftOf="@+id/card_view"
+        map:layout_constraintBottom_toBottomOf="@+id/card_view"
+        android:layout_height="495dp"
+        map:layout_constraintBottom_creator="@integer/google_play_services_version"
+        tools:context="com.soch.tourismapp.MapsActivity" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:layout_height="60dp"
+        android:id="@+id/bottomLayout"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:weightSum="1"
+        android:background="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.42"
+            android:layout_margin="10dp"
+            android:id="@+id/vehicle"
+            android:background="@drawable/vehicle1" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.42"
+            android:layout_margin="10dp"
+            android:id="@+id/walk"
+            android:background="@drawable/walk1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:layout_margin="10dp"
+            android:id="@+id/duration"
+            android:text="DistanceMinutes" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
