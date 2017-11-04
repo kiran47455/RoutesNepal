@@ -118,6 +118,8 @@ public class NearbyPlaces extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
+        build_retrofit_and_get_response("hospital");
+
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -161,7 +163,7 @@ public class NearbyPlaces extends AppCompatActivity implements OnMapReadyCallbac
                         Double lng = response.body().getResults().get(i).getGeometry().getLocation().getLng();
                         String placeName = response.body().getResults().get(i).getName();
                         String vicinity = response.body().getResults().get(i).getVicinity();
-                        String photo = response.body().getResults().get(i).getReference();
+                        //  String photo = response.body().getResults().get(i).getReference();
 
                         MarkerOptions markerOptions = new MarkerOptions();
                         if(find.equals("hospital")){

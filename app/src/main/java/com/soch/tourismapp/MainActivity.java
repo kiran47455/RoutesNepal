@@ -36,8 +36,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
     EditText searchText;
-    Button searchButton;
+    //  Button searchButton;
     LinearLayout bottomLayout;
     Button vehicle,walk;
     TextView duration;
@@ -90,53 +94,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         bottomLayout = (LinearLayout) findViewById(R.id.bottomLayout);
-        searchText = (EditText) findViewById(R.id.searchText);
-
-        searchButton = (Button) findViewById(R.id.searchButton);
+        // searchText = (EditText) findViewById(R.id.searchText);
+        //  searchButton = (Button) findViewById(R.id.searchButton);
         vehicle = (Button) findViewById(R.id.vehicle);
         walk = (Button) findViewById(R.id.walk);
         duration = (TextView) findViewById(R.id.duration);
         checkUserLocation();
-        vehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vehicle.setBackgroundResource(R.drawable.vehicle1_selected);
-                walk.setBackgroundResource(R.drawable.walk1);
-             //   Toast.makeText(getApplicationContext(),origin.latitude+" "+origin.longitude+" Dest : "+dest.latitude+" "+dest.longitude,Toast.LENGTH_LONG).show();
-                build_retrofit_and_get_response("driving");
-            }
-        });
-        walk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vehicle.setBackgroundResource(R.drawable.vehicle1);
-                walk.setBackgroundResource(R.drawable.walk1_selected);
-              //  Toast.makeText(getApplicationContext(),origin.latitude+" "+origin.longitude+" Dest : "+dest.latitude+" "+dest.longitude,Toast.LENGTH_LONG).show();
-                build_retrofit_and_get_response("walking");
 
-            }
-        });
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onClick(View v) {
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
                 mMap.clear();
-                String location = searchText.getText().toString();
-                List<Address> addressList = null;
+                duration.setText("");
+                bottomLayout.setVisibility(View.INVISIBLE);
+                String location = (String) place.getAddress();
+                // List<Address> addressList = null;
                 if(location==null){
                     Toast.makeText(getApplicationContext(),"Enter search value...",Toast.LENGTH_LONG).show();
                 }
-                else if (location != null && !location.equals("")) {
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 1);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address = addressList.get(0);
-                    final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                final LatLng latLng = place.getLatLng();
                     dest = latLng;
-                    mMap.addMarker(new MarkerOptions().position(latLng).title("Lat : "+address.getLatitude()+" Lon : "+address.getLongitude()).draggable(true));
+                mMap.addMarker(new MarkerOptions().position(latLng).title("Lat : " + latLng.latitude + " Lon : " + latLng.longitude).draggable(true));
                     mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                         @Override
                         public void onMarkerDragStart(Marker marker) {
@@ -160,8 +143,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                 }
 
+
+            @Override
+            public void onError(Status status) {
+
+            }
+
+
+        });
+        vehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vehicle.setBackgroundResource(R.drawable.vehicle1_selected);
+                walk.setBackgroundResource(R.drawable.walk1);
+                //   Toast.makeText(getApplicationContext(),origin.latitude+" "+origin.longitude+" Dest : "+dest.latitude+" "+dest.longitude,Toast.LENGTH_LONG).show();
+                build_retrofit_and_get_response("driving");
             }
         });
+        walk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vehicle.setBackgroundResource(R.drawable.vehicle1);
+                walk.setBackgroundResource(R.drawable.walk1_selected);
+                //  Toast.makeText(getApplicationContext(),origin.latitude+" "+origin.longitude+" Dest : "+dest.latitude+" "+dest.longitude,Toast.LENGTH_LONG).show();
+                build_retrofit_and_get_response("walking");
+
+            }
+        });
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//               mMap.clear();
+//                String location = searchText.getText().toString();
+//                List<Address> addressList = null;
+//                if(location==null){
+//                    Toast.makeText(getApplicationContext(),"Enter search value...",Toast.LENGTH_LONG).show();
+//                }
+//                else if (location != null && !location.equals("")) {
+//                    Geocoder geocoder = new Geocoder(getApplicationContext());
+//                    try {
+//                        addressList = geocoder.getFromLocationName(location, 1);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Address address = addressList.get(0);
+//                    final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//                    dest = latLng;
+//                    mMap.addMarker(new MarkerOptions().position(latLng).title("Lat : "+address.getLatitude()+" Lon : "+address.getLongitude()).draggable(true));
+//                    mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+//                        @Override
+//                        public void onMarkerDragStart(Marker marker) {
+//                            Toast.makeText(getApplicationContext(),"Drag to preferred Destination",Toast.LENGTH_LONG).show();
+//                        }
+//
+//                        @Override
+//                        public void onMarkerDrag(Marker marker) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onMarkerDragEnd(Marker marker) {
+//                            Log.d("System out", "onMarkerDragEnd..."+marker.getPosition().latitude+"..."+marker.getPosition().longitude);
+//                            LatLng latitudenlongitude = new LatLng(marker.getPosition().latitude,marker.getPosition().longitude);
+//                            dest = latitudenlongitude;
+//                            mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+//                        }
+//                    });
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+//                }
+//
+//            }
+//        });
 
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -177,9 +231,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 bottomLayout.setVisibility(View.VISIBLE);
-                if (line != null) {
-                       line.remove();
-                      }
                 vehicle.setBackgroundResource(R.drawable.vehicle1_selected);
                 walk.setBackgroundResource(R.drawable.walk1);
                 build_retrofit_and_get_response("driving");
@@ -199,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void build_retrofit_and_get_response(String type) {
 
-        if(mMap!=null){
+        if (mMap != null) {
             mMap.clear();
         }
         mMap.addMarker(new MarkerOptions().position(origin).title("Lat : "+origin.latitude+" Lon : "+origin.longitude));
@@ -226,9 +277,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 try {
                     //Remove previous line from map
-                  //  if (line != null) {
-                     //   line.remove();
-                  //  }
+
+                    if (line != null) {
+                        line.remove();
+                    }
                     // This loop will go through all the results and add marker on each location.
                     for (int i = 0; i < response.body().getRoutes().size(); i++) {
                         String distance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
@@ -265,11 +317,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (location == null) {
                     return;
                 }
-                mMap.clear();
+                //  mMap.clear();
                // Log.i("Location", location.toString());
                 LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(myLocation).title("Current location"+myLocation.latitude+"Lon : "+myLocation.longitude));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+                //    mMap.addMarker(new MarkerOptions().position(myLocation).title("Current location"+myLocation.latitude+"Lon : "+myLocation.longitude));
+                //   mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
                 origin = myLocation;
             }
 

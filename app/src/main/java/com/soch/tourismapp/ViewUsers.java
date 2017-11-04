@@ -38,7 +38,7 @@ public class ViewUsers extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.getUiSettings().setMapToolbarEnabled(false);
         double latitude[] = {28.2380, 28.2385, 28.2390, 28.2320, 28.2340, 28.2318, 28.2350, 28.2399, 28.2365, 28.2360};
         double longitude[] = {83.9956, 83.9960, 83.9933, 83.9945, 83.9968, 83.9914, 83.9940, 83.9933, 83.9985, 83.9974};
 
